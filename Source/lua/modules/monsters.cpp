@@ -21,7 +21,7 @@ void AddMonsterDataFromTsv(const std::string_view path)
 	LoadMonstDatFromFile(dataFile, path);
 }
 
-void AddUniqueMonsterData(const std::string_view type, const std::string_view name, const std::string_view trn, const uint8_t level, const uint16_t maxHp, const std::string_view ai, const uint8_t intelligence, const uint8_t minDamage, const uint8_t maxDamage, const std::string_view resistance, const std::string_view monsterPack, const std::optional<uint8_t> customToHit, const std::optional<uint8_t> customArmorClass)
+void AddUniqueMonsterData(const std::string_view type, const std::string_view name, const std::string_view trn, const uint8_t level, const uint16_t maxHp, const std::string_view ai, const uint8_t intelligence, const uint8_t minDamage, const uint8_t maxDamage, const std::string_view resistance, const std::string_view monsterPack, const std::optional<uint8_t> customToHit, const std::optional<uint8_t> customArmorClass, const std::optional<std::string_view> minionType)
 {
 	UniqueMonsterData monster;
 
@@ -69,6 +69,17 @@ void AddUniqueMonsterData(const std::string_view type, const std::string_view na
 	monster.customArmorClass = customArmorClass.value_or(0);
 	monster.mtalkmsg = TEXT_NONE;
 
+	if (minionType.has_value()) {
+		const auto minionTypeResult = ParseMonsterId(minionType.value());
+		if (!minionTypeResult.has_value()) {
+			DisplayFatalErrorAndExit(_("Adding Unique Monster Failed"), fmt::format(fmt::runtime(_("Failed to parse minion monster type ID \"{}\": {}")), minionType.value(), minionTypeResult.error()));
+		}
+
+		monster.mMinionType = minionTypeResult.value();
+	} else {
+		monster.mMinionType = monster.mtype;
+	}
+
 	UniqueMonstersData.push_back(std::move(monster));
 }
 
@@ -78,7 +89,7 @@ sol::table LuaMonstersModule(sol::state_view &lua)
 {
 	sol::table table = lua.create_table();
 	LuaSetDocFn(table, "addMonsterDataFromTsv", "(path: string)", AddMonsterDataFromTsv);
-	LuaSetDocFn(table, "addUniqueMonsterData", "(type: string, name: string, trn: string, level: number, maxHp: number, ai: string, intelligence: number, minDamage: number, maxDamage: number, resistance: string, monsterPack: string, customToHit: number = nil, customArmorClass: number = nil)", AddUniqueMonsterData);
+	LuaSetDocFn(table, "addUniqueMonsterData", "(type: string, name: string, trn: string, level: number, maxHp: number, ai: string, intelligence: number, minDamage: number, maxDamage: number, resistance: string, monsterPack: string, customToHit: number = nil, customArmorClass: number = nil, minionType: string = nil)", AddUniqueMonsterData);
 	return table;
 }
 

@@ -469,6 +469,8 @@ void LoadUniqueMonstDat()
 			if (value == "TEXT_WARLRD9") return TEXT_WARLRD9;
 			return tl::make_unexpected("Invalid value. NOTE: Parser is incomplete");
 		});
+
+		monster.mMinionType = monster.mtype;
 	}
 
 	UniqueMonstersData.shrink_to_fit();
