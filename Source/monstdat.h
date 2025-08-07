@@ -328,6 +328,7 @@ struct UniqueMonsterData {
 	uint8_t customToHit;
 	uint8_t customArmorClass;
 	_speech_id mtalkmsg;
+	_monster_id mMinionType; // the monster type of the unique monster's minions; if not provided, will default to the unique monster's own monster type
 };
 
 extern std::vector<MonsterData> MonstersData;

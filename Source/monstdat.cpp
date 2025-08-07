@@ -224,6 +224,15 @@ tl::expected<_monster_id, std::string> ParseMonsterId(std::string_view value)
 	return tl::make_unexpected("Unknown enum value");
 }
 
+tl::expected<_monster_id, std::string> ParseMonsterIdIfNotEmpty(std::string_view value)
+{
+	if (value.empty()) {
+		return MT_INVALID;
+	}
+
+	return ParseMonsterId(value);
+}
+
 tl::expected<MonsterAvailability, std::string> ParseMonsterAvailability(std::string_view value)
 {
 	if (value == "Always") return MonsterAvailability::Always;
@@ -399,6 +408,11 @@ void LoadUniqueMonstDat()
 			if (value == "TEXT_WARLRD9") return TEXT_WARLRD9;
 			return tl::make_unexpected("Invalid value. NOTE: Parser is incomplete");
 		});
+
+		reader.read("minionType", monster.mMinionType, ParseMonsterIdIfNotEmpty);
+		if (monster.mMinionType == MT_INVALID) {
+			monster.mMinionType = monster.mtype;
+		}
 	}
 	UniqueMonstersData.shrink_to_fit();
 }

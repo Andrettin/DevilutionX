@@ -456,9 +456,18 @@ tl::expected<void, std::string> PlaceUniqueMonsters()
 		if (UniqueMonstersData[u].mlevel != currlevel)
 			continue;
 
-		const size_t minionType = GetMonsterTypeIndex(UniqueMonstersData[u].mtype);
-		if (minionType == LevelMonsterTypeCount)
+		const size_t minionType = GetMonsterTypeIndex(UniqueMonstersData[u].mMinionType);
+		if (minionType == LevelMonsterTypeCount) {
 			continue;
+		}
+
+		if (UniqueMonstersData[u].mtype != UniqueMonstersData[u].mMinionType && GetMonsterTypeIndex(UniqueMonstersData[u].mtype) == LevelMonsterTypeCount) {
+			if (LevelMonsterTypeCount < MaxLvlMTypes) {
+				RETURN_IF_ERROR(AddMonsterType(UniqueMonstersData[u].mtype, PLACE_UNIQUE));
+			} else {
+				continue;
+			}
+		}
 
 		UniqueMonsterType uniqueType = static_cast<UniqueMonsterType>(u);
 		if (uniqueType == UniqueMonsterType::Garbud && Quests[Q_GARBUD]._qactive == QUEST_NOTAVAIL)
