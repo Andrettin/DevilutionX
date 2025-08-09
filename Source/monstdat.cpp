@@ -429,10 +429,7 @@ void LoadUniqueMonstDat()
 			return tl::make_unexpected("Invalid value. NOTE: Parser is incomplete");
 		});
 
-		reader.read("minionType", monster.mMinionType, ParseMonsterIdIfNotEmpty);
-		if (monster.mMinionType == MT_INVALID) {
-			monster.mMinionType = monster.mtype;
-		}
+		monster.mMinionType = monster.mtype;
 	}
 
 	UniqueMonstersData.insert(UniqueMonstersData.end(), AdditionalUniqueMonstersData.begin(), AdditionalUniqueMonstersData.end());
