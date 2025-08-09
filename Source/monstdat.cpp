@@ -8,7 +8,6 @@
 #include <cstdint>
 
 #include <ankerl/unordered_dense.h>
-#include <expected.hpp>
 #include <magic_enum/magic_enum.hpp>
 
 #include "cursor.h"
@@ -55,6 +54,9 @@ std::vector<MonsterData> MonstersData;
 
 /** Contains the data related to each unique monster ID. */
 std::vector<UniqueMonsterData> UniqueMonstersData;
+
+/** Contains the additional unique monster data from mods. */
+std::vector<UniqueMonsterData> AdditionalUniqueMonstersData;
 
 /**
  * Map between .DUN file value and monster type enum
@@ -219,8 +221,6 @@ const _monster_id MonstConvTbl[] = {
 	MT_LRDSAYTR,
 };
 
-namespace {
-
 tl::expected<_monster_id, std::string> ParseMonsterId(std::string_view value)
 {
 	const std::optional<_monster_id> enumValueOpt = magic_enum::enum_cast<_monster_id>(value);
@@ -230,6 +230,8 @@ tl::expected<_monster_id, std::string> ParseMonsterId(std::string_view value)
 	return tl::make_unexpected("Unknown enum value");
 }
 
+namespace {
+	
 tl::expected<_monster_id, std::string> ParseMonsterIdIfNotEmpty(std::string_view value)
 {
 	if (value.empty()) {
@@ -247,6 +249,8 @@ tl::expected<MonsterAvailability, std::string> ParseMonsterAvailability(std::str
 	return tl::make_unexpected("Expected one of: Always, Never, or Retail");
 }
 
+}
+
 tl::expected<MonsterAIID, std::string> ParseAiId(std::string_view value)
 {
 	const std::optional<MonsterAIID> enumValueOpt = magic_enum::enum_cast<MonsterAIID>(value);
@@ -255,6 +259,8 @@ tl::expected<MonsterAIID, std::string> ParseAiId(std::string_view value)
 	}
 	return tl::make_unexpected("Unknown enum value");
 }
+
+namespace {
 
 tl::expected<monster_flag, std::string> ParseMonsterFlag(std::string_view value)
 {
@@ -282,6 +288,8 @@ tl::expected<MonsterClass, std::string> ParseMonsterClass(std::string_view value
 	return tl::make_unexpected("Unknown enum value");
 }
 
+}
+
 tl::expected<monster_resistance, std::string> ParseMonsterResistance(std::string_view value)
 {
 	const std::optional<monster_resistance> enumValueOpt = magic_enum::enum_cast<monster_resistance>(value);
@@ -290,6 +298,8 @@ tl::expected<monster_resistance, std::string> ParseMonsterResistance(std::string
 	}
 	return tl::make_unexpected("Unknown enum value");
 }
+
+namespace {
 
 tl::expected<SelectionRegion, std::string> ParseSelectionRegion(std::string_view value)
 {
@@ -300,6 +310,8 @@ tl::expected<SelectionRegion, std::string> ParseSelectionRegion(std::string_view
 	return tl::make_unexpected("Unknown enum value");
 }
 
+}
+
 tl::expected<UniqueMonsterPack, std::string> ParseUniqueMonsterPack(std::string_view value)
 {
 	const std::optional<UniqueMonsterPack> enumValueOpt = magic_enum::enum_cast<UniqueMonsterPack>(value);
@@ -308,6 +320,8 @@ tl::expected<UniqueMonsterPack, std::string> ParseUniqueMonsterPack(std::string_
 	}
 	return tl::make_unexpected("Unknown enum value");
 }
+
+namespace {
 
 void LoadMonstDat()
 {
@@ -420,6 +434,9 @@ void LoadUniqueMonstDat()
 			monster.mMinionType = monster.mtype;
 		}
 	}
+
+	UniqueMonstersData.insert(UniqueMonstersData.end(), AdditionalUniqueMonstersData.begin(), AdditionalUniqueMonstersData.end());
+
 	UniqueMonstersData.shrink_to_fit();
 }
 
