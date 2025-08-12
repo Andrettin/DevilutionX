@@ -81,9 +81,9 @@ void AddUniqueMonsterData(const std::string_view type, const std::string_view na
 	}
 
 	// perform some validation
-	const MonsterData &monsterTypeData = MonstersData[monster.mtype];
-	if (monster.mlevel != 0 && (monster.mlevel < monsterTypeData.minDunLvl || monster.mlevel > monsterTypeData.maxDunLvl)) {
-		DisplayFatalErrorAndExit(_("Adding Unique Monster Failed"), fmt::format(fmt::runtime(_("Unique monster \"{}\" has a dungeon level of {}, which is incompatible with the dungeon level range of {}-{} for its monster type \"{}\".")), monster.mName, monster.mlevel, monsterTypeData.minDunLvl, monsterTypeData.maxDunLvl, monsterTypeData.name));
+	const MonsterData &minionTypeData = MonstersData[monster.mMinionType];
+	if (monster.mlevel != 0 && (monster.mlevel < minionTypeData.minDunLvl || monster.mlevel > minionTypeData.maxDunLvl)) {
+		DisplayFatalErrorAndExit(_("Adding Unique Monster Failed"), fmt::format(fmt::runtime(_("Unique monster \"{}\" has a dungeon level of {}, which is incompatible with the dungeon level range of {}-{} for its minion type \"{}\".")), monster.mName, monster.mlevel, minionTypeData.minDunLvl, minionTypeData.maxDunLvl, minionTypeData.name));
 	}
 
 	UniqueMonstersData.push_back(std::move(monster));
