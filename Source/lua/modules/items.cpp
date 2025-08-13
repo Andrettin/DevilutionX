@@ -5,6 +5,8 @@
 #include <fmt/format.h>
 #include <sol/sol.hpp>
 
+#include "data/file.hpp"
+#include "itemdat.h"
 #include "items.h"
 #include "lua/metadoc.hpp"
 #include "player.h"
@@ -475,6 +477,12 @@ void AddUniqueItemPower(UniqueItem &uniqueItem, const std::optional<std::string_
 	}
 }
 
+void AddItemDataFromTsv(const std::string_view modname, const std::string_view path)
+{
+	DataFile dataFile = DataFile::loadFromModOrDie(modname, path);
+	LoadItemDatFromFile(dataFile, path);
+}
+
 void AddUniqueItemData(const std::string_view name, const int32_t mappingId, const std::string_view cursorGraphic, const std::string_view uniqueBaseItem, const int8_t minLevel, const int value, const std::optional<std::string_view> power0, const std::optional<int> power0_value1, const std::optional<int> power0_value2, const std::optional<std::string_view> power1, const std::optional<int> power1_value1, const std::optional<int> power1_value2, const std::optional<std::string_view> power2, const std::optional<int> power2_value1, const std::optional<int> power2_value2, const std::optional<std::string_view> power3, const std::optional<int> power3_value1, const std::optional<int> power3_value2, const std::optional<std::string_view> power4, const std::optional<int> power4_value1, const std::optional<int> power4_value2, const std::optional<std::string_view> power5, const std::optional<int> power5_value1, const std::optional<int> power5_value2)
 {
 	UniqueItem uniqueItem;
@@ -532,6 +540,7 @@ sol::table LuaItemModule(sol::state_view &lua)
 
 	sol::table table = lua.create_table();
 
+	LuaSetDocFn(table, "addItemDataFromTsv", "(modname: string, path: string)", AddItemDataFromTsv);
 	LuaSetDocFn(table, "addUniqueItemData", "(name: string, mappingId: number, cursorGraphic: string, uniqueBaseItem: string, minLevel: number, value: number, power0: string = nil, power0_value1: number = nil, power0_value2: number = nil, power1: string = nil, power1_value1: number = nil, power1_value2: number = nil, power2: string = nil, power2_value1: number = nil, power2_value2: number = nil, power3: string = nil, power3_value1: number = nil, power3_value2: number = nil, power4: string = nil, power4_value1: number = nil, power4_value2: number = nil, power5: string = nil, power5_value1: number = nil, power5_value2: number = nil)", AddUniqueItemData);
 
 	return table;

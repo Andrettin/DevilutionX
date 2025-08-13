@@ -17,6 +17,8 @@
 
 namespace devilution {
 
+class DataFile;
+
 /** @todo add missing values and apply */
 enum _item_indexes : int16_t { // TODO defines all indexes in AllItemsList
 	IDI_GOLD,
@@ -652,6 +654,7 @@ extern ankerl::unordered_dense::map<int32_t, int32_t> UniqueItemMappingIdsToIndi
 tl::expected<item_cursor_graphic, std::string> ParseItemCursorGraphic(std::string_view value);
 tl::expected<unique_base_item, std::string> ParseUniqueBaseItem(std::string_view value);
 tl::expected<item_effect_type, std::string> ParseItemEffectType(std::string_view value);
+void LoadItemDatFromFile(DataFile &dataFile, std::string_view filename);
 void LoadItemData();
 
 } // namespace devilution
