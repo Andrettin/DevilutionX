@@ -164,14 +164,12 @@ std::string DebugSpawnUniqueItem(std::string itemName)
 		testItem._iMiscId = baseItemData.iMiscId;
 		std::uniform_int_distribution<int32_t> dist(0, INT_MAX);
 		SetRndSeed(dist(BetterRng));
-		for (auto &flag : UniqueItemFlags)
-			flag = true;
+		UniqueItemFlags.set();
 		UniqueItemFlags[uniqueIndex] = false;
 		SetupAllItems(*MyPlayer, testItem, uniqueBaseIndex, testItem._iMiscId == IMISC_UNIQUE ? uniqueIndex : AdvanceRndSeed(), uniqueItem.UIMinLvl, 1, false, false);
 		TryRandomUniqueItem(testItem, uniqueBaseIndex, uniqueItem.UIMinLvl, 1, false, false);
 		SetupItem(testItem);
-		for (auto &flag : UniqueItemFlags)
-			flag = false;
+		UniqueItemFlags.reset();
 
 		if (testItem._iMagical != ITEM_QUALITY_UNIQUE)
 			continue;
