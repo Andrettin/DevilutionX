@@ -63,7 +63,7 @@ uint8_t ActiveItemCount;
 int8_t dItem[MAXDUNX][MAXDUNY];
 bool ShowUniqueItemInfoBox;
 CornerStoneStruct CornerStone;
-bool UniqueItemFlags[128];
+std::bitset<128 * 8> UniqueItemFlags;
 int MaxGold = GOLD_MAX_LIMIT;
 
 /** Maps from item_cursor_graphic to in-memory item type. */
@@ -2378,7 +2378,7 @@ uint8_t GetOutlineColor(const Item &item, bool checkReq)
 
 void ClearUniqueItemFlags()
 {
-	memset(UniqueItemFlags, 0, sizeof(UniqueItemFlags));
+	UniqueItemFlags.reset();
 }
 
 void InitItemGFX()

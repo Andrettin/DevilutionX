@@ -2592,8 +2592,13 @@ tl::expected<void, std::string> LoadGame(bool firstflag)
 
 	LoadAdditionalMissiles();
 
-	for (bool &uniqueItemFlag : UniqueItemFlags)
-		uniqueItemFlag = file.NextBool8();
+	for (size_t i = 0; i < UniqueItemFlags.size(); i += 8) {
+		const uint8_t value = file.NextLE<int8_t>();
+
+		for (size_t j = 0; j < 8; ++j) {
+			UniqueItemFlags[i + j] = (value & (1 << j)) != 0;
+		}
+	}
 
 	file.Skip<uint8_t>(MAXDUNY * MAXDUNX); // dLight
 	for (int j = 0; j < MAXDUNY; j++) {
@@ -2862,8 +2867,16 @@ void SaveGameData(SaveWriter &saveWriter)
 
 	auto itemIndexes = SaveDroppedItems(file);
 
-	for (const bool uniqueItemFlag : UniqueItemFlags)
-		file.WriteLE<uint8_t>(uniqueItemFlag ? 1 : 0);
+	for (size_t i = 0; i < UniqueItemFlags.size(); i += 8) {
+		uint8_t value = 0;
+
+		for (size_t j = 0; j < 8; ++j) {
+			value |= UniqueItemFlags[i + j];
+			value <<= 1;
+		}
+
+		file.WriteLE<uint8_t>(value);
+	}
 
 	for (int j = 0; j < MAXDUNY; j++) {
 		for (int i = 0; i < MAXDUNX; i++) // NOLINT(modernize-loop-convert)
