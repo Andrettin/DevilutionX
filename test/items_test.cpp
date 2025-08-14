@@ -20,8 +20,7 @@ public:
 	{
 		Players.resize(1);
 		MyPlayer = &Players[0];
-		for (auto &flag : UniqueItemFlags)
-			flag = false;
+		UniqueItemFlags.reset();
 	}
 
 	static void SetUpTestSuite()
