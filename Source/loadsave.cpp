@@ -2592,11 +2592,12 @@ tl::expected<void, std::string> LoadGame(bool firstflag)
 
 	LoadAdditionalMissiles();
 
-	for (size_t i = 0; i < UniqueItemFlags.size(); i += 8) {
-		const uint8_t value = file.NextLE<int8_t>();
+	for (size_t i = 0; i < UniqueItemFlags.size(); i += (sizeof(uint32_t) * 8)) {
+		const uint32_t value = file.NextLE<int32_t>();
+		const std::bitset<sizeof(uint32_t) * 8> subBitset(value);
 
-		for (size_t j = 0; j < 8; ++j) {
-			UniqueItemFlags[i + j] = (value & (1 << j)) != 0;
+		for (size_t j = 0; j < subBitset.size(); ++j) {
+			UniqueItemFlags[i + j] = subBitset[j];
 		}
 	}
 
@@ -2867,15 +2868,19 @@ void SaveGameData(SaveWriter &saveWriter)
 
 	auto itemIndexes = SaveDroppedItems(file);
 
-	for (size_t i = 0; i < UniqueItemFlags.size(); i += 8) {
-		uint8_t value = 0;
+	for (size_t i = 0; i < UniqueItemFlags.size(); i += (sizeof(uint32_t) * 8)) {
+		uint32_t value = 0;
 
-		for (size_t j = 0; j < 8; ++j) {
-			value |= UniqueItemFlags[i + j];
-			value <<= 1;
+		for (size_t j = 0; j < (sizeof(uint32_t) * 8); ++j) {
+			if (UniqueItemFlags[i + j]) {
+				value |= UniqueItemFlags[i + j];
+			}
+			if (j > 0) {
+				value <<= 1;
+			}
 		}
 
-		file.WriteLE<uint8_t>(value);
+		file.WriteLE<uint32_t>(value);
 	}
 
 	for (int j = 0; j < MAXDUNY; j++) {
