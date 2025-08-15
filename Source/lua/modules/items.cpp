@@ -453,15 +453,15 @@ void RegisterItemSpecialEffectHfEnum(sol::state_view &lua)
 	    });
 }
 
-void AddItemDataFromTsv(const std::string_view modname, const std::string_view path, const int32_t baseMappingId)
+void AddItemDataFromTsv(const std::string_view path, const int32_t baseMappingId)
 {
-	DataFile dataFile = DataFile::loadFromModOrDie(modname, path);
+	DataFile dataFile = DataFile::loadOrDie(path);
 	LoadItemDatFromFile(dataFile, path, baseMappingId);
 }
 
-void AddUniqueItemDataFromTsv(const std::string_view modname, const std::string_view path, const int32_t baseMappingId)
+void AddUniqueItemDataFromTsv(const std::string_view path, const int32_t baseMappingId)
 {
-	DataFile dataFile = DataFile::loadFromModOrDie(modname, path);
+	DataFile dataFile = DataFile::loadOrDie(path);
 	LoadUniqueItemDatFromFile(dataFile, path, baseMappingId);
 }
 
@@ -482,8 +482,8 @@ sol::table LuaItemModule(sol::state_view &lua)
 
 	sol::table table = lua.create_table();
 
-	LuaSetDocFn(table, "addItemDataFromTsv", "(modname: string, path: string, baseMappingId: number)", AddItemDataFromTsv);
-	LuaSetDocFn(table, "addUniqueItemDataFromTsv", "(modname: string, path: string, baseMappingId: number)", AddUniqueItemDataFromTsv);
+	LuaSetDocFn(table, "addItemDataFromTsv", "(path: string, baseMappingId: number)", AddItemDataFromTsv);
+	LuaSetDocFn(table, "addUniqueItemDataFromTsv", "(path: string, baseMappingId: number)", AddUniqueItemDataFromTsv);
 
 	return table;
 }
