@@ -178,6 +178,8 @@ enum quest_id : int8_t {
 	Q_NAKRUL,
 	Q_CORNSTN,
 	Q_JERSEY,
+	NUM_DEFAULT_QUESTS,
+	NUM_MAX_QUESTS = std::numeric_limits<int8_t>::max(),
 	Q_INVALID = -1,
 };
 

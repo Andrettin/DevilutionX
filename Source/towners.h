@@ -95,6 +95,6 @@ void UpdateCowFarmerAnimAfterQuestComplete();
 #ifdef _DEBUG
 bool DebugTalkToTowner(_talker_id type);
 #endif
-extern _speech_id QuestDialogTable[NUM_TOWNER_TYPES][MAXQUESTS];
+extern _speech_id QuestDialogTable[NUM_TOWNER_TYPES][NUM_MAX_QUESTS];
 
 } // namespace devilution
