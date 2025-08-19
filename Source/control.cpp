@@ -774,11 +774,12 @@ std::string TextCmdLevelSeed(const std::string_view parameter)
 	const std::string_view mode = gbIsMultiplayer ? "MP" : "SP";
 	const std::string_view questPool = UseMultiplayerQuests() ? "MP" : "Full";
 
-	uint32_t questFlags = 0;
+	std::string questFlags;
 	for (const Quest &quest : Quests) {
-		questFlags <<= 1;
 		if (IsQuestEnabled(quest))
-			questFlags |= 1;
+			questFlags += "1";
+		else
+			questFlags += "0";
 	}
 
 	return StrCat(

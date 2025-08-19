@@ -260,7 +260,7 @@ struct MultiQuests {
 
 struct DJunk {
 	DPortal portal[MAXPORTAL];
-	MultiQuests quests[MAXQUESTS];
+	MultiQuests quests[NUM_MAX_QUESTS];
 };
 #pragma pack(pop)
 
@@ -731,7 +731,7 @@ const std::byte *DeltaImportJunk(const std::byte *src, const std::byte *end)
 	}
 
 	int q = 0;
-	for (int qidx = 0; qidx < MAXQUESTS; qidx++) {
+	for (int qidx = 0; qidx < static_cast<int>(Quests.size()); qidx++) {
 		if (QuestsData[qidx].isSinglePlayerOnly && UseMultiplayerQuests()) {
 			continue;
 		}
@@ -2468,7 +2468,7 @@ size_t OnSyncQuest(const TCmdQuest &message, Player &player)
 	if (gbBufferMsgs == 1) {
 		BufferMessage(player, &message, sizeof(message));
 	} else {
-		if (&player != MyPlayer && message.q < MAXQUESTS && message.qstate <= QUEST_HIVE_DONE)
+		if (&player != MyPlayer && message.q < static_cast<int>(Quests.size()) && message.qstate <= QUEST_HIVE_DONE)
 			SetMultiQuest(message.q, message.qstate, message.qlog != 0, message.qvar1, message.qvar2, SDL_SwapLE16(message.qmsg));
 	}
 

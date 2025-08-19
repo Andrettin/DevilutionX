@@ -43,7 +43,7 @@ namespace devilution {
 bool QuestLogIsOpen;
 OptionalOwnedClxSpriteList pQLogCel;
 /** Contains the quests of the current game. */
-Quest Quests[MAXQUESTS];
+std::vector<Quest> Quests;
 Point ReturnLvlPosition;
 dungeon_type ReturnLevelType;
 int ReturnLevel;
@@ -56,7 +56,7 @@ namespace {
 int WaterDone;
 
 /** Indices of quests to display in quest log window. `FirstFinishedQuest` are active quests the rest are completed */
-quest_id EncounteredQuests[MAXQUESTS];
+quest_id EncounteredQuests[NUM_MAX_QUESTS];
 /** Overall number of EncounteredQuests entries */
 int EncounteredQuestCount;
 /** First (nonselectable) finished quest in list */
@@ -249,7 +249,7 @@ void InitQuests()
 		Quests[Q_MUSHROOM]._qvar1 = QS_TOMESPAWNED;
 }
 
-void InitialiseQuestPools(uint32_t seed, Quest quests[])
+void InitialiseQuestPools(uint32_t seed, std::vector<Quest> &quests)
 {
 	DiabloGenerator rng(seed);
 	quests[rng.pickRandomlyAmong({ Q_SKELKING, Q_PWATER })]._qactive = QUEST_NOTAVAIL;
@@ -956,6 +956,8 @@ void LoadQuestData()
 	LoadQuestDatFromFile(dataFile, filename);
 
 	QuestsData.shrink_to_fit();
+
+	Quests.resize(QuestsData.size());
 }
 
 } // namespace devilution
