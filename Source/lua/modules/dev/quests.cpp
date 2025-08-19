@@ -17,7 +17,7 @@ namespace {
 
 std::string DebugCmdEnableQuest(uint8_t questId)
 {
-	if (questId >= MAXQUESTS) return StrCat("Quest ", questId, " does not exist!");
+	if (questId >= Quests.size()) return StrCat("Quest ", questId, " does not exist!");
 	Quest &quest = Quests[questId];
 
 	if (IsNoneOf(quest._qactive, QUEST_NOTAVAIL, QUEST_INIT))
@@ -41,7 +41,7 @@ std::string DebugCmdEnableQuests()
 
 std::string DebugCmdQuestInfo(const uint8_t questId)
 {
-	if (questId >= MAXQUESTS) return StrCat("Quest ", questId, " does not exist!");
+	if (questId >= Quests.size()) return StrCat("Quest ", questId, " does not exist!");
 	const Quest &quest = Quests[questId];
 	return StrCat("Quest id=", quest._qidx, " ", QuestsData[quest._qidx]._qlstr,
 	    " active=", quest._qactive, " var1=", quest._qvar1, " var2=", quest._qvar2);

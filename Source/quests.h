@@ -19,8 +19,6 @@
 
 namespace devilution {
 
-#define MAXQUESTS 24
-
 /** States of the mushroom quest */
 enum {
 	QS_INIT,
@@ -108,7 +106,7 @@ struct QuestData {
 
 extern bool QuestLogIsOpen;
 extern OptionalOwnedClxSpriteList pQLogCel;
-extern DVL_API_FOR_TEST Quest Quests[MAXQUESTS];
+extern DVL_API_FOR_TEST std::vector<Quest> Quests;
 extern Point ReturnLvlPosition;
 extern dungeon_type ReturnLevelType;
 extern int ReturnLevel;
@@ -120,7 +118,7 @@ void InitQuests();
  * @param seed The seed used to control which quests are deactivated
  * @param quests The available quest list, this function will make some of them inactive by the time it returns
  */
-void InitialiseQuestPools(uint32_t seed, Quest quests[]);
+void InitialiseQuestPools(uint32_t seed, std::vector<Quest> &quests);
 void CheckQuests();
 bool ForceQuests();
 void CheckQuestKill(const Monster &monster, bool sendmsg);
