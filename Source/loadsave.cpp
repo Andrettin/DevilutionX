@@ -2521,6 +2521,7 @@ tl::expected<void, std::string> LoadGame(bool firstflag)
 	if (sgGameInitInfo.nDifficulty < DIFF_NORMAL || sgGameInitInfo.nDifficulty > DIFF_HELL)
 		sgGameInitInfo.nDifficulty = DIFF_NORMAL;
 
+	// FIXME: load custom quests
 	for (int i = 0; i < giNumberQuests; i++)
 		LoadQuest(&file, i);
 	for (int i = 0; i < MAXPORTAL; i++)
@@ -2819,6 +2820,7 @@ void SaveGameData(SaveWriter &saveWriter)
 	const Player &myPlayer = *MyPlayer;
 	SavePlayer(file, myPlayer);
 
+	//FIXME: save custom quests
 	for (int i = 0; i < giNumberQuests; i++)
 		SaveQuest(&file, i);
 	for (int i = 0; i < MAXPORTAL; i++)
