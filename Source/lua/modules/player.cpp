@@ -4,12 +4,15 @@
 
 #include <sol/sol.hpp>
 
+#include "data/file.hpp"
 #include "engine/point.hpp"
 #include "lua/metadoc.hpp"
 #include "player.h"
 
 namespace devilution {
+
 namespace {
+
 void InitPlayerUserType(sol::state_view &lua)
 {
 	sol::usertype<Player> playerType = lua.new_usertype<Player>(sol::no_constructor);
@@ -29,6 +32,13 @@ void InitPlayerUserType(sol::state_view &lua)
 	    "Character level (writeable)",
 	    &Player::getCharacterLevel, &Player::setCharacterLevel);
 }
+
+void AddClassDataFromTsv(const std::string_view path)
+{
+	DataFile dataFile = DataFile::loadOrDie(path);
+	LoadClassDatFromFile(dataFile, path);
+}
+
 } // namespace
 
 sol::table LuaPlayerModule(sol::state_view &lua)
@@ -45,6 +55,7 @@ sol::table LuaPlayerModule(sol::state_view &lua)
 	    [](int x, int y) {
 		    NetSendCmdLoc(MyPlayerId, true, CMD_WALKXY, Point { x, y });
 	    });
+	LuaSetDocFn(table, "addClassDataFromTsv", "(path: string)", AddClassDataFromTsv);
 	return table;
 }
 
