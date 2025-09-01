@@ -21,6 +21,7 @@
 #include "data/record_reader.hpp"
 #include "data/value_reader.hpp"
 #include "items.h"
+#include "lua/lua_global.hpp"
 #include "player.h"
 #include "textdat.h"
 #include "utils/language.h"
@@ -339,6 +340,8 @@ void LoadClassDat()
 	DataFile dataFile = DataFile::loadOrDie(filename);
 	PlayersData.clear();
 	LoadClassDatFromFile(dataFile, filename);
+
+	LuaEvent("ClassDataLoaded");
 
 	PlayersData.shrink_to_fit();
 }
