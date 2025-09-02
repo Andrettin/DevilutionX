@@ -2194,18 +2194,18 @@ void OperateSlainHero(const Player &player, Object &corpse, bool sendmsg)
 			}
 		}
 
-		if (hasShield) {
-			CreateMagicArmor(corpse.position, ItemType::HeavyArmor, ICURS_BREAST_PLATE, sendmsg, false);
-		} else if (hasBow) {
+		if (hasBow) {
 			CreateMagicWeapon(corpse.position, ItemType::Bow, ICURS_LONG_BATTLE_BOW, sendmsg, false);
 		} else if (hasSpell) {
 			CreateSpellBook(corpse.position, SpellID::Lightning, sendmsg, false);
 		} else if (hasStaff) {
 			CreateMagicWeapon(corpse.position, ItemType::Staff, ICURS_WAR_STAFF, sendmsg, false);
-		} else if (hasSword) {
-			CreateMagicWeapon(corpse.position, ItemType::Sword, ICURS_BASTARD_SWORD, sendmsg, false);
 		} else if (hasAxe) {
 			CreateMagicWeapon(corpse.position, ItemType::Axe, ICURS_BATTLE_AXE, sendmsg, false);
+		} else if (hasShield) {
+			CreateMagicArmor(corpse.position, ItemType::HeavyArmor, ICURS_BREAST_PLATE, sendmsg, false);
+		} else if (hasSword) {
+			CreateMagicWeapon(corpse.position, ItemType::Sword, ICURS_BASTARD_SWORD, sendmsg, false);
 		}
 	}
 	MyPlayer->Say(HeroSpeech::RestInPeaceMyFriend);
