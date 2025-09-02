@@ -617,6 +617,9 @@ void AddCryptObject(Object &object, int a2)
 			case HeroClass::Bard:
 				object._oVar2 = TEXT_BBOOKA;
 				break;
+			default:
+				object._oVar2 = TEXT_BOOKA;
+				break;
 			}
 			break;
 		case 7:
@@ -637,6 +640,9 @@ void AddCryptObject(Object &object, int a2)
 			case HeroClass::Bard:
 				object._oVar2 = TEXT_BBOOKB;
 				break;
+			default:
+				object._oVar2 = TEXT_BOOKB;
+				break;
 			}
 			break;
 		case 8:
@@ -656,6 +662,9 @@ void AddCryptObject(Object &object, int a2)
 				break;
 			case HeroClass::Bard:
 				object._oVar2 = TEXT_BBOOKC;
+				break;
+			default:
+				object._oVar2 = TEXT_BOOKC;
 				break;
 			}
 			break;
@@ -1998,6 +2007,9 @@ void OperateChamberOfBoneBook(Object &questBook, bool sendmsg)
 		textdef = TEXT_RBONER;
 		break;
 	case HeroClass::Barbarian:
+		textdef = TEXT_BONER;
+		break;
+	default:
 		textdef = TEXT_BONER;
 		break;
 	}
@@ -3868,6 +3880,9 @@ void InitObjects()
 				case HeroClass::Barbarian:
 					spId = TEXT_BLINDING;
 					break;
+				default:
+					spId = TEXT_BLINDING;
+					break;
 				}
 				Quests[Q_BLIND]._qmsg = spId;
 				AddBookLever(OBJ_BLINDBOOK, { SetPiece.position, SetPiece.size + 1 }, spId);
@@ -3892,6 +3907,9 @@ void InitObjects()
 					spId = TEXT_RBLOODY;
 					break;
 				case HeroClass::Barbarian:
+					spId = TEXT_BLOODY;
+					break;
+				default:
 					spId = TEXT_BLOODY;
 					break;
 				}
@@ -3925,6 +3943,9 @@ void InitObjects()
 					spId = TEXT_RBLOODWAR;
 					break;
 				case HeroClass::Barbarian:
+					spId = TEXT_BLOODWAR;
+					break;
+				default:
 					spId = TEXT_BLOODWAR;
 					break;
 				}
