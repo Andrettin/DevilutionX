@@ -2157,6 +2157,56 @@ void OperateSlainHero(const Player &player, Object &corpse, bool sendmsg)
 		CreateMagicWeapon(corpse.position, ItemType::Sword, ICURS_BASTARD_SWORD, sendmsg, false);
 	} else if (player._pClass == HeroClass::Barbarian) {
 		CreateMagicWeapon(corpse.position, ItemType::Axe, ICURS_BATTLE_AXE, sendmsg, false);
+	} else {
+		// for custom classes, create an item depending on their starting equipment
+		const PlayerStartingLoadoutData &startingLoadoutData = GetPlayerStartingLoadoutForClass(player._pClass);
+
+		bool hasSword = false;
+		bool hasAxe = false;
+		bool hasStaff = false;
+		bool hasBow = false;
+		bool hasShield = false;
+		const bool hasSpell = startingLoadoutData.spell != SpellID::Null;
+		for (const _item_indexes item : startingLoadoutData.items) {
+			if (item == _item_indexes::IDI_NONE) {
+				continue;
+			}
+
+			const ItemData &itemData = AllItemsList[static_cast<size_t>(item)];
+			switch (itemData.itype) {
+			case ItemType::Sword:
+				hasSword = true;
+				break;
+			case ItemType::Axe:
+				hasAxe = true;
+				break;
+			case ItemType::Staff:
+				hasStaff = true;
+				break;
+			case ItemType::Bow:
+				hasBow = true;
+				break;
+			case ItemType::Shield:
+				hasShield = true;
+				break;
+			default:
+				break;
+			}
+		}
+
+		if (hasShield) {
+			CreateMagicArmor(corpse.position, ItemType::HeavyArmor, ICURS_BREAST_PLATE, sendmsg, false);
+		} else if (hasBow) {
+			CreateMagicWeapon(corpse.position, ItemType::Bow, ICURS_LONG_BATTLE_BOW, sendmsg, false);
+		} else if (hasSpell) {
+			CreateSpellBook(corpse.position, SpellID::Lightning, sendmsg, false);
+		} else if (hasStaff) {
+			CreateMagicWeapon(corpse.position, ItemType::Staff, ICURS_WAR_STAFF, sendmsg, false);
+		} else if (hasSword) {
+			CreateMagicWeapon(corpse.position, ItemType::Sword, ICURS_BASTARD_SWORD, sendmsg, false);
+		} else if (hasAxe) {
+			CreateMagicWeapon(corpse.position, ItemType::Axe, ICURS_BATTLE_AXE, sendmsg, false);
+		}
 	}
 	MyPlayer->Say(HeroSpeech::RestInPeaceMyFriend);
 	if (sendmsg)
