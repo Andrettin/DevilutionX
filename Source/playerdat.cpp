@@ -310,10 +310,14 @@ std::vector<ankerl::unordered_dense::map<HeroSpeech, SfxID>> herosounds;
 
 } // namespace
 
-void LoadClassDatFromFile(DataFile &dataFile, const std::string_view filename)
+/** Contains player class mapping IDs, with item indices assigned to them. This is used for loading saved games. */
+ankerl::unordered_dense::map<uint8_t, HeroClass> PlayerClassMappingIdsToIndices;
+
+void LoadClassDatFromFile(DataFile &dataFile, const std::string_view filename, uint8_t baseMappingId)
 {
 	dataFile.skipHeaderOrDie(filename);
 
+	uint8_t currentMappingId = baseMappingId;
 	PlayersData.reserve(PlayersData.size() + dataFile.numRecords());
 
 	for (DataFileRecord record : dataFile) {
@@ -329,6 +333,14 @@ void LoadClassDatFromFile(DataFile &dataFile, const std::string_view filename)
 		reader.readString("folderName", playerData.folderName);
 		reader.readInt("portrait", playerData.portrait);
 		reader.readString("inv", playerData.inv);
+
+		playerData.mappingId = currentMappingId;
+		const auto [it, inserted] = PlayerClassMappingIdsToIndices.emplace(playerData.mappingId, static_cast<HeroClass>(PlayersData.size() - 1));
+		if (!inserted) {
+			DisplayFatalErrorAndExit("Adding Player Class Failed", fmt::format("A player class already exists for mapping ID {}.", playerData.mappingId));
+		}
+
+		++currentMappingId;
 	}
 }
 
@@ -339,7 +351,8 @@ void LoadClassDat()
 	const std::string_view filename = "txtdata\\classes\\classdat.tsv";
 	DataFile dataFile = DataFile::loadOrDie(filename);
 	PlayersData.clear();
-	LoadClassDatFromFile(dataFile, filename);
+	PlayerClassMappingIdsToIndices.clear();
+	LoadClassDatFromFile(dataFile, filename, 0);
 
 	LuaEvent("ClassDataLoaded");
 

@@ -8,6 +8,8 @@
 #include <array>
 #include <cstdint>
 
+#include <ankerl/unordered_dense.h>
+
 #include "effects.h"
 #include "itemdat.h"
 #include "spelldat.h"
@@ -50,6 +52,8 @@ struct PlayerData {
 	uint8_t portrait;
 	/* Class Inventory UI File */
 	std::string inv;
+	/* Class Mapping ID (used for loading saved games) */
+	uint8_t mappingId;
 };
 
 struct ClassAttributes {
@@ -215,7 +219,7 @@ struct PlayerAnimData {
 /**
  * @brief Attempts to load data values from external files.
  */
-void LoadClassDatFromFile(DataFile &dataFile, const std::string_view filename);
+void LoadClassDatFromFile(DataFile &dataFile, const std::string_view filename, uint8_t baseMappingId);
 void LoadPlayerDataFiles();
 
 SfxID GetHeroSound(HeroClass clazz, HeroSpeech speech);
@@ -227,6 +231,8 @@ const PlayerCombatData &GetPlayerCombatDataForClass(HeroClass clazz);
 const PlayerStartingLoadoutData &GetPlayerStartingLoadoutForClass(HeroClass clazz);
 const PlayerSpriteData &GetPlayerSpriteDataForClass(HeroClass clazz);
 const PlayerAnimData &GetPlayerAnimDataForClass(HeroClass clazz);
+
+extern ankerl::unordered_dense::map<uint8_t, HeroClass> PlayerClassMappingIdsToIndices;
 
 } // namespace devilution
 

@@ -33,10 +33,10 @@ void InitPlayerUserType(sol::state_view &lua)
 	    &Player::getCharacterLevel, &Player::setCharacterLevel);
 }
 
-void AddClassDataFromTsv(const std::string_view path)
+void AddClassDataFromTsv(const std::string_view path, const uint8_t baseMappingId)
 {
 	DataFile dataFile = DataFile::loadOrDie(path);
-	LoadClassDatFromFile(dataFile, path);
+	LoadClassDatFromFile(dataFile, path, baseMappingId);
 }
 
 } // namespace
@@ -55,7 +55,7 @@ sol::table LuaPlayerModule(sol::state_view &lua)
 	    [](int x, int y) {
 		    NetSendCmdLoc(MyPlayerId, true, CMD_WALKXY, Point { x, y });
 	    });
-	LuaSetDocFn(table, "addClassDataFromTsv", "(path: string)", AddClassDataFromTsv);
+	LuaSetDocFn(table, "addClassDataFromTsv", "(path: string, baseMappingId: number)", AddClassDataFromTsv);
 	return table;
 }
 
