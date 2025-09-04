@@ -388,7 +388,7 @@ void LoadAndValidateItemData(LoadHelper &file, Item &item)
 	RemoveInvalidItem(item);
 }
 
-void LoadPlayer(LoadHelper &file, Player &player)
+tl::expected<void, std::string> LoadPlayer(LoadHelper &file, Player &player)
 {
 	player._pmode = static_cast<PLR_MODE>(file.NextLE<int32_t>());
 
@@ -485,7 +485,14 @@ void LoadPlayer(LoadHelper &file, Player &player)
 
 	file.NextBytes(player._pName, PlayerNameLength);
 	TerminateUtf8(player._pName, PlayerNameLength);
-	player._pClass = static_cast<HeroClass>(file.NextLE<int8_t>());
+
+	const uint8_t classMappingId = file.NextLE<uint8_t>();
+	const auto findIt = PlayerClassMappingIdsToIndices.find(classMappingId);
+	if (findIt == PlayerClassMappingIdsToIndices.end()) {
+		return tl::make_unexpected(fmt::format("Could not find player class with mapping ID {}.", classMappingId));
+	}
+	player._pClass = findIt->second;
+
 	file.Skip(3); // Alignment
 	player._pStrength = file.NextLE<int32_t>();
 	player._pBaseStr = file.NextLE<int32_t>();
@@ -2516,7 +2523,7 @@ tl::expected<void, std::string> LoadGame(bool firstflag)
 
 	Player &myPlayer = *MyPlayer;
 
-	LoadPlayer(file, myPlayer);
+	RETURN_IF_ERROR(LoadPlayer(file, myPlayer));
 
 	if (sgGameInitInfo.nDifficulty < DIFF_NORMAL || sgGameInitInfo.nDifficulty > DIFF_HELL)
 		sgGameInitInfo.nDifficulty = DIFF_NORMAL;

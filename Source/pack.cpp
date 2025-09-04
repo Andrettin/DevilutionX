@@ -359,7 +359,10 @@ void UnPackPlayer(const PlayerPack &packed, Player &player)
 	player.position.future = position;
 	player.setLevel(std::clamp<int8_t>(packed.plrlevel, 0, NUMLEVELS));
 
-	player._pClass = static_cast<HeroClass>(std::clamp<uint8_t>(packed.pClass, 0, static_cast<uint8_t>(GetNumPlayerClasses() - 1)));
+	const uint8_t classMappingId = packed.pClass;
+	const auto findIt = PlayerClassMappingIdsToIndices.find(classMappingId);
+	const uint8_t classIndex = findIt != PlayerClassMappingIdsToIndices.end() ? static_cast<uint8_t>(findIt->second) : classMappingId;
+	player._pClass = static_cast<HeroClass>(std::clamp<uint8_t>(classIndex, 0, static_cast<uint8_t>(GetNumPlayerClasses() - 1)));
 
 	ClrPlrPath(player);
 	player.destAction = ACTION_NONE;
@@ -464,8 +467,11 @@ bool UnPackNetPlayer(const PlayerNetPack &packed, Player &player)
 {
 	CopyUtf8(player._pName, packed.pName, sizeof(player._pName));
 
-	ValidateField(packed.pClass, packed.pClass < GetNumPlayerClasses());
-	player._pClass = static_cast<HeroClass>(packed.pClass);
+	const uint8_t classMappingId = packed.pClass;
+	const auto findIt = PlayerClassMappingIdsToIndices.find(classMappingId);
+	ValidateField(packed.pClass, findIt != PlayerClassMappingIdsToIndices.end());
+	const HeroClass classId = findIt->second;
+	player._pClass = classId;
 
 	const Point position { packed.px, packed.py };
 	ValidateFields(position.x, position.y, InDungeonBounds(position));
