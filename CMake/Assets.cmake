@@ -158,17 +158,6 @@ set(devilutionx_assets
   plrgfx/warrior/whu/whulm.trn
   plrgfx/warrior/whu/whuqm.trn
   txtdata/Experience.tsv
-  txtdata/classes/barbarian/animations.tsv
-  txtdata/classes/barbarian/attributes.tsv
-  txtdata/classes/barbarian/sounds.tsv
-  txtdata/classes/barbarian/sprites.tsv
-  txtdata/classes/barbarian/starting_loadout.tsv
-  txtdata/classes/bard/animations.tsv
-  txtdata/classes/bard/attributes.tsv
-  txtdata/classes/bard/sounds.tsv
-  txtdata/classes/bard/sprites.tsv
-  txtdata/classes/bard/starting_loadout.tsv
-  txtdata/classes/monk/animations.tsv
   txtdata/classes/rogue/animations.tsv
   txtdata/classes/rogue/attributes.tsv
   txtdata/classes/rogue/sounds.tsv
