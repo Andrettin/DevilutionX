@@ -169,10 +169,6 @@ set(devilutionx_assets
   txtdata/classes/bard/sprites.tsv
   txtdata/classes/bard/starting_loadout.tsv
   txtdata/classes/monk/animations.tsv
-  txtdata/classes/monk/attributes.tsv
-  txtdata/classes/monk/sounds.tsv
-  txtdata/classes/monk/sprites.tsv
-  txtdata/classes/monk/starting_loadout.tsv
   txtdata/classes/rogue/animations.tsv
   txtdata/classes/rogue/attributes.tsv
   txtdata/classes/rogue/sounds.tsv
