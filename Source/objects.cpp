@@ -2875,6 +2875,26 @@ void OperateShrineOily(Player &player, Point spawnPosition)
 		ModifyPlrDex(player, 1);
 		ModifyPlrMag(player, 1);
 		break;
+	default:
+	{
+		const ClassAttributes &classAttributes = GetClassAttributes(player._pClass);
+		if (classAttributes.maxVit >= 150) {
+			ModifyPlrVit(player, 2);
+		} else if (classAttributes.maxStr >= 200) {
+			ModifyPlrStr(player, 2);
+		} else if (classAttributes.maxDex >= 200) {
+			ModifyPlrDex(player, 2);
+		} else if (classAttributes.maxMag >= 200) {
+			ModifyPlrMag(player, 2);
+		} else if (classAttributes.maxDex >= 100 && classAttributes.maxMag >= 100) {
+			ModifyPlrDex(player, 1);
+			ModifyPlrMag(player, 1);
+		} else if (classAttributes.maxStr >= 100 && classAttributes.maxDex >= 100) {
+			ModifyPlrStr(player, 1);
+			ModifyPlrDex(player, 1);
+		}
+		break;
+	}
 	}
 
 	CheckStats(player);
