@@ -2411,11 +2411,7 @@ void AddHealing(Missile &missile, AddMissileParameter & /*parameter*/)
 	hp += GenerateRndSum(6, missile._mispllvl) + missile._mispllvl;
 	hp <<= 6;
 
-	if (player._pClass == HeroClass::Warrior || player._pClass == HeroClass::Barbarian || player._pClass == HeroClass::Monk) {
-		hp *= 2;
-	} else if (player._pClass == HeroClass::Rogue || player._pClass == HeroClass::Bard) {
-		hp += hp / 2;
-	}
+	hp = AddClassHealingBonus(hp, player._pClass);
 
 	player._pHitPoints = std::min(player._pHitPoints + hp, player._pMaxHP);
 	player._pHPBase = std::min(player._pHPBase + hp, player._pMaxHPBase);
