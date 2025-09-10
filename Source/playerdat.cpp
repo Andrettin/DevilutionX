@@ -356,6 +356,10 @@ void LoadClassDat()
 
 	LuaEvent("ClassDataLoaded");
 
+	std::sort(PlayersData.begin(), PlayersData.end(), [](const PlayerData &lhs, const PlayerData &rhs) {
+		return lhs.mappingId < rhs.mappingId;
+	});
+
 	PlayersData.shrink_to_fit();
 }
 
